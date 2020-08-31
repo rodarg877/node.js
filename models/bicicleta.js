@@ -15,6 +15,21 @@ Bicicleta.add= (aBici) =>{
     Bicicleta.allBicis.push(aBici);
 }
 
+Bicicleta.findById= function (aBiciId){
+    var aBici= Bicicleta.allBicis.filter(x=> x.id== aBiciId)
+if (aBici) {
+    return aBici[0];
+} else {
+    throw new Error (`no existe una bicicleta con el id ${aBici}`);
+}
+}
+
+Bicicleta.removeById = function(aBiciId){
+    var i = Bicicleta.allBicis.indexOf(Bicicleta.findById(aBiciId));
+    Bicicleta.allBicis.splice(i, 1);
+
+}
+
 var a = new Bicicleta ( 1, 'rojo', 'urbana', [34.6012424,58.3861497]);
 var b = new Bicicleta ( 2, 'blanca', 'urbana', [34.596932,58.3808287]);
 
