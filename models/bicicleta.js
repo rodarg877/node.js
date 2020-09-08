@@ -1,39 +1,46 @@
-const Bicicleta =function (id, color, modelo, ubicacion) {
-    this.id = id;
-        this.color = color;
-        this.modelo = modelo;
-        this.ubicacion = ubicacion;
+const mongoose = require('mongoose');
+const { db } = require('./reserva');
+var Schema = mongoose.Schema;
+
+var bicicletaSchema = new Schema({
+    code: Number,
+    color: String,
+    modelo: String,
+    ubicacion: {
+        type: [Number], index: { type: '2dsphere', sparse: true }
+    }
+});
+
+bicicletaSchema.statics.createInstance = function (code, color, modelo, ubicacion) {
+    return new this({
+        code: code,
+        color: color,
+        modelo: modelo,
+        ubicacion: ubicacion
+    });
+};
+
+bicicletaSchema.methods.toString = function () {
+    return 'code: ' + this.code + ' | color: ' + this.color;
+};
+
+bicicletaSchema.statics.allBicis = function (cb) {
+    return this.find({}, cb);
+};
+bicicletaSchema.statics.add = function (aBici, cb) {
+    this.create(aBici, cb);
 }
 
-Bicicleta.prototype.toString = function (){
-    return 'id: ' + this.id + " | color: " + this.color;
+bicicletaSchema.statics.findByCode = function (aCode, cb) {
+    return this.findOne({ code: aCode }, cb);
+}
+bicicletaSchema.statics.updateByCode = function (aCode, color, modelo, lat, lng, cb) {
+    return this.updateOne({ code: aCode }, { color: color, modelo: modelo, ubicacion: [lat, lng] }, cb);
 }
 
-Bicicleta.allBicis= [];
-
-Bicicleta.add= (aBici) =>{
-    Bicicleta.allBicis.push(aBici);
+bicicletaSchema.statics.removeByCode = function (aCode, cb) {
+    return this.deleteOne({ code: aCode }, cb);
 }
 
-Bicicleta.findById= function (aBiciId){
-    var aBici= Bicicleta.allBicis.filter(x=> x.id== aBiciId)
-if (aBici) {
-    return aBici[0];
-} else {
-    throw new Error (`no existe una bicicleta con el id ${aBici}`);
-}
-}
+module.exports = mongoose.model('Bicicleta', bicicletaSchema);
 
-Bicicleta.removeById = function(aBiciId){
-    var i = Bicicleta.allBicis.indexOf(Bicicleta.findById(aBiciId));
-    Bicicleta.allBicis.splice(i, 1);
-
-}
-
-/* var a = new Bicicleta ( 1, 'rojo', 'urbana', [-34.6343603, -58.4059233]);
-var b = new Bicicleta ( 2, 'blanca', 'urbana', [34.596932,58.3808287]);
-
-Bicicleta.add(a);
-Bicicleta.add(b); */
-
-module.exports = Bicicleta;
