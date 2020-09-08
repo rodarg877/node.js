@@ -32,7 +32,7 @@ bicicletaSchema.statics.add = function (aBici, cb) {
 }
 
 bicicletaSchema.statics.findByCode = function (aCode, cb) {
-    return this.findOne({ code: aCode }, cb);
+    return this.find({ code: aCode }, cb);
 }
 bicicletaSchema.statics.updateByCode = function (aCode, color, modelo, lat, lng, cb) {
     return this.updateOne({ code: aCode }, { color: color, modelo: modelo, ubicacion: [lat, lng] }, cb);
