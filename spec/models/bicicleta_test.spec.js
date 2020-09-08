@@ -70,55 +70,48 @@ describe('Testing bicicletas', function () {
         });
     });
 
-    /* describe('Bicicleta.findByCode', function () {
+    describe('Bicicleta.findByCode', () => {
         it('debe devolver la bici con code 1', function (done) {
             Bicicleta.allBicis(function (err, bicis) {
                 expect(bicis.length).toBe(0);
-            });
+                var aBici = new Bicicleta({ code: 1, color: "verde", modelo: "urbana" });
+                Bicicleta.add(aBici, function (err) {
+                    if (err) console.log(err);
+                    var aBici2 = new Bicicleta({ code: 2, color: "rojo", modelo: "urbana" });
+                    Bicicleta.add(aBici2, function (err) {
+                        if (err) console.log(err);
+                        Bicicleta.findByCode(1, function (err, targetBici) {
+                            expect(targetBici.code).toBe(aBici.code);
+                            expect(targetBici.color).toBe(aBici.color);
+                            expect(targetBici.modelo).toBe(aBici.modelo);
 
-            var aBici = new Bicicleta({ code: 1, color: "verde", modelo: "urbana" });
-            Bicicleta.add(aBici, function (err) {
-                if (err) console.log(err);
-            });
-            var aBici2 = new Bicicleta({ code: 2, color: "rojo", modelo: "urbana" });
-
-            Bicicleta.add(aBici2, function (err) {
-                if (err) console.log(err);
-            });
-            Bicicleta.findByCode(2, function (err, targetBici) {
-                console.log(targetBici)
-                expect(targetBici.code).toBe(aBici.code);
-                expect(targetBici.color).toBe(aBici.color);
-                expect(targetBici.modelo).toBe(aBici.modelo);
-
-                done();
-            });
-        });
-    }); */
-   /*  describe('Bicicleta.removeByCode', function () {
-        it('debe devolver la bici con code 1', function (done) {
-            Bicicleta.allBicis(function (err, bicis) {
-                expect(bicis.length).toBe(0);
-            });
-
-            var aBici = new Bicicleta({ code: 1, color: "verde", modelo: "urbana" });
-            aBici.save(aBici);
-
-            Bicicleta.allBicis(function (err, bicis) {
-                expect(bicis.length).toBe(1);
-                console.log( bicis)
-            });
-
-            Bicicleta.removeByCode(1, function (err, success) {
-                if (err) console.log(err);
-
-                Bicicleta.allBicis(function (err, bicis) {
-                    expect(bicis.length).toBe(0);
-                    done();
+                            done();
+                        });
+                    });
                 });
-            })
+            });
         });
-    }); */
-});
+    });
+    describe('Bicicleta.removeByCode', function () {
+        it('debe devolver la bici con code 1', function (done) {
+            Bicicleta.allBicis(function (err, bicis) {
+                expect(bicis.length).toBe(0);
+                var aBici = new Bicicleta({ code: 1, color: "verde", modelo: "urbana" });
+                Bicicleta.add(aBici, function (err) {
+                    if (err) console.log(err);
+                    Bicicleta.allBicis(function (err, bicis) {
+                        expect(bicis.length).toBe(1);
+                        Bicicleta.removeByCode(1, function (err, success) {
+                            if (err) console.log(err);
+                            Bicicleta.allBicis(function (err, bicis) {
+                                expect(bicis.length).toBe(0);
+                                done();
+                            });
+                        })
+                    });
 
-
+                });
+            });
+        });
+    });
+})
