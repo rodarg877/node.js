@@ -3,11 +3,7 @@ const Bicicleta = require('../../models/bicicleta');
 
 
 describe('Testing bicicletas', function () {
-    var originalTimeout;
-    beforeAll(function () {
-        originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-    });
+    beforeAll((done) => { mongoose.connection.close(done) });
     beforeEach(function (done) {
         mongoose.disconnect();
         const mongoDB = 'mongodb://localhost:27017/testdb';
@@ -20,20 +16,13 @@ describe('Testing bicicletas', function () {
             done();
         });
     });
-    it("takes a long time", function (done) {
-        setTimeout(function () {
-            done();
-        }, 9000);
-    });
     afterEach((done) => {
         Bicicleta.deleteMany({}, function (err, success) {
             if (err) console.log(err);
             done();
         });
     });
-    afterAll(function () {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-    });
+    
     describe('Bicicleta.createInstance', function () {
         it('crea una instancia de Bicicleta', function () {
             var bici = Bicicleta.createInstance(1, "verde", "urbana", [-34.5, -54.1]);
