@@ -29,8 +29,3 @@ mailConfig = sgTransport(options)
         }
     }
 }
-
-
-
-
-module.exports = nodemailer.createTransport(mailConfig);
