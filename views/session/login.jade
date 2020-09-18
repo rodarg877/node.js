@@ -25,6 +25,9 @@ body#LoginForm
             input#password.form-control(type='password' placeholder='Password' name="password")
           .forgot
             a(href='/forgotPassword') Olvidé mi password
+          .form-group
+            a(href='/auth/google')
+                img(src='../../images/images.png' style="width:100px;height:80px;")  
 
 
           button.btn.btn-primary(type='submit') Login

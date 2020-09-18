@@ -2,6 +2,20 @@ var passport = require('passport');
 const { findOne } = require('../models/usuario');
 var localStrategy = require('passport-local').Strategy;
 const Usuario = require('../models/usuario');
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.HOST + "/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+      console.log(profile)
+    Usuario.findOrCreate(profile, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 
 passport.use(new localStrategy(
     function (email, password, done) {

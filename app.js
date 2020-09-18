@@ -9,6 +9,7 @@ var Token = require('./models/token')
 var passport = require('passport');
 require('./config/passport');
 var session = require('express-session')
+var mongoDBStore = require('connect-mongodb-session')(session);
 var jwt= require('jsonwebtoken');
 
 
@@ -19,7 +20,21 @@ var bicicletasRouter = require('./routes/bicicletas');
 var bicicletasAPIRouter = require('./routes/api/bicicletas');
 var usuariosAPIRouter = require('./routes/api/usuarios');
 var authAPIRouter = require('./routes/api/auth');
-const store = new session.MemoryStore;
+
+let store;
+if (process.env.NODE_ENV==='development') {
+  const store = new session.MemoryStore;
+} else {
+  const store = new mongoDBStore({
+    uri:process.env.MONGO_URI,
+    collection: 'sessions'
+  })
+  store.on('error',function(error){
+    assert.ifError(error);
+    assert.ok(false);
+  });
+}
+
 
 
 
@@ -36,7 +51,7 @@ app.use(session({
 }));
 
 var mongoose = require('mongoose');
-const { info } = require('console');
+const { info, assert } = require('console');
 var mongoDB = process.env.MONGO_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
@@ -127,6 +142,17 @@ app.post('/resetPassword', function (req, res) {
     });
   });
 });
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope: [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/plus.profile.emails.read'
+  ] }));
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
 
 app.use('/', indexRouter);
 app.use('/usuarios', usuariosRouter);
