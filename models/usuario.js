@@ -83,7 +83,7 @@ usuarioSchema.methods.enviar_email_bienvenida = function (cb) {
     })
 }
 
-usuarioSchema.static.findOrCreate = function (condition, cb) {
+usuarioSchema.statics.findOrCreate = function (condition, cb) {
     const self = this;
     console.log(condition);
     self.findOne({
