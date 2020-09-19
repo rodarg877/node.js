@@ -10,7 +10,7 @@ var passport = require('passport');
 require('./config/passport');
 var session = require('express-session')
 var mongoDBStore = require('connect-mongodb-session')(session);
-var jwt= require('jsonwebtoken');
+var jwt = require('jsonwebtoken');
 
 
 var indexRouter = require('./routes/index');
@@ -22,14 +22,14 @@ var usuariosAPIRouter = require('./routes/api/usuarios');
 var authAPIRouter = require('./routes/api/auth');
 
 let store;
-if (process.env.NODE_ENV==='development') {
+if (process.env.NODE_ENV === 'development') {
   const store = new session.MemoryStore;
 } else {
   const store = new mongoDBStore({
-    uri:process.env.MONGO_URI,
+    uri: process.env.MONGO_URI,
     collection: 'sessions'
   })
-  store.on('error',function(error){
+  store.on('error', function (error) {
     assert.ifError(error);
     assert.ok(false);
   });
@@ -80,7 +80,7 @@ app.post('/login', function (req, res, next) {
   passport.authenticate('local', function (err, usuario, info) {
     console.log(info)
     if (err) return next(err);
-    if (!usuario) return res.render('session/login', { info }) ;
+    if (!usuario) return res.render('session/login', { info });
     req.logIn(usuario, function (err) {
       if (err) return next(err)
       return res.redirect('/')
@@ -144,11 +144,16 @@ app.post('/resetPassword', function (req, res) {
 });
 
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile','https://www.googleapis.com/auth/userinfo.email	'] }));
+  passport.authenticate('google', {
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      ,'https://www.googleapis.com/auth/userinfo.email'
+    ]
+  }));
 
-app.get('/auth/google/callback', 
+app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
+  function (req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
   });
@@ -157,15 +162,15 @@ app.use('/', indexRouter);
 app.use('/usuarios', usuariosRouter);
 app.use('/token', tokenRouter);
 app.use('/bicicletas', loggedIn, bicicletasRouter);
-app.use('/api/bicicletas',validarUsuario, bicicletasAPIRouter);
+app.use('/api/bicicletas', validarUsuario, bicicletasAPIRouter);
 app.use('/api/usuarios', usuariosAPIRouter);
 app.use('/api/auth', authAPIRouter);
 
-app.use('/privacy_policy', function (req, res){
+app.use('/privacy_policy', function (req, res) {
   res.sendFile('public/privacy_policy.html')
 })
 
-app.use('/googleb1785682a67faf96', function (req, res){
+app.use('/googleb1785682a67faf96', function (req, res) {
   res.sendFile('public/googleb1785682a67faf96.html')
 })
 
@@ -196,15 +201,15 @@ function loggedIn(req, res, next) {
 
 
 function validarUsuario(req, res, next) {
- jwt.verify(req.headers['x-access-token'],req.app.get('secretKey'),function (err, decoded) {
-   if(err) {
-     res.json({status:'error', message: err.message, data:null});
-   }else{
-     req.body.userId= decoded.id;
-     console.log('jwt verify: ' + decoded);
-     next()
-   }
- })
+  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
+    if (err) {
+      res.json({ status: 'error', message: err.message, data: null });
+    } else {
+      req.body.userId = decoded.id;
+      console.log('jwt verify: ' + decoded);
+      next()
+    }
+  })
 }
 
 module.exports = app;
