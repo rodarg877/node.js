@@ -144,7 +144,7 @@ app.post('/resetPassword', function (req, res) {
 });
 
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/contacts'] }));
 
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
