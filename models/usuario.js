@@ -101,7 +101,7 @@ usuarioSchema.statics.findOrCreate = function (condition, cb) {
             values.email = condition.emails[0].value;
             values.nombre = condition.displayName || 'SIN NOMBRE';
             values.verificado= true;
-            values.password = condition._json.etag;
+            values.password = condition._json.sub;
             console.log('========Values============');
             console.log(values);
             self.create(values, (err, result) => {
