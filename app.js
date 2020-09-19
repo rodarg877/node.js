@@ -144,15 +144,16 @@ app.post('/resetPassword', function (req, res) {
 });
 
 app.get('/auth/google',
-passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.me', // request access here
-'https://www.googleapis.com/auth/userinfo.email',] }));
+  passport.authenticate('google', { scope: 
+      [ 'https://www.googleapis.com/auth/plus.login',
+      , 'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
+));
 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+app.get( '/auth/google/callback', 
+    passport.authenticate( 'google', { 
+        successRedirect: '/',
+        failureRedirect: '/login'
+}));
 
 app.use('/', indexRouter);
 app.use('/usuarios', usuariosRouter);
