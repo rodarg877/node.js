@@ -9,10 +9,9 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.HOST + "/auth/google/callback"
   },
-  function(accessToken, refreshToken, profile, cb) {
-      console.log(profile)
+  function(accessToken, refreshToken, profile, done) {
     Usuario.findOrCreate(profile, function (err, user) {
-      return cb(err, user);
+      return done(err, user);
     });
   }
 ));
