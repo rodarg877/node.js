@@ -3,6 +3,21 @@ const { findOne } = require('../models/usuario');
 var localStrategy = require('passport-local').Strategy;
 const Usuario = require('../models/usuario');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_ID,
+    clientSecret: process.env.FACEBOOK_SECRET,
+    callbackURL: process.env.HOST + "/auth/facebook/callback",
+    profileFields: ['id', 'emails', 'name']
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate(profile, function(err, user) {
+      if (err) { return done(err); }
+      done(null, user);
+    });
+  }
+));
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,

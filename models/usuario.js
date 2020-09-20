@@ -37,7 +37,9 @@ var usuarioSchema = new Schema({
     verificado: {
         type: Boolean,
         default: false
-    }
+    },
+    googleId: String,
+    facebookId: String
 });
 usuarioSchema.plugin(uniqueValidator, { message: 'el {PATH} ya existe con otro usuario' });
 
@@ -111,6 +113,36 @@ usuarioSchema.statics.findOrCreate = function (condition, cb) {
         }
     })
 };
+
+usuarioSchema.statics.findOrCreateFacebook = function (condition, cb) {
+    const self = this;
+    console.log(condition);
+    self.findOne({
+        $or: [
+            { 'facebookId': condition.id }, { 'email': condition.emails[0].value }
+        ]
+    }, (err, result) => {
+        if (result) {
+            cb(err, result)
+        } else {
+            console.log('========condition============');
+            console.log(condition);
+            let values = {};
+            values.facebookId = condition.id;
+            values.email = condition.emails[0].value;
+            values.nombre = condition.displayName || 'SIN NOMBRE';
+            values.verificado= true;
+            values.password = crypto.randomBytes(16).toString('hex');
+            console.log('========Values============');
+            console.log(values);
+            self.create(values, (err, result) => {
+                if (err) { console.log(err); }
+                return cb(err, result)
+            })
+        }
+    })
+};
+
 
 usuarioSchema.methods.resetPassword = function (cb) {
     const token = new Token({ _userId: this.id, token: crypto.randomBytes(16).toString('hex') });

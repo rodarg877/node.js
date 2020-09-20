@@ -26,6 +26,17 @@ module.exports = {
                 res.status(200).json({ message: ' Se envio mail para restablecer la contraseña', data:null });
             });
         });
+    /* },
+    authFacebookToken: function(req,res, next){
+        if(req.user){
+            req.user.save.then(()=>{
+                const token = jwt.sing({id: req.user.id}, req.app.get('secretKey'),{expiresIn:'7d'});
+                res.status(200).json({message:"usuario encontrado o creado", data: {user: req.user, token:token}});
+            }).catch((err)=>{res.status(500).json({message:err});
+        });
+        }else{
+            res.status(401);
+        } */
     }   
 }
 
