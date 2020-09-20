@@ -12,7 +12,7 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'emails', 'name']
   },
   function(accessToken, refreshToken, profile, done) {
-    Ususario.findOrCreateFacebook(profile, function(err, user) {
+    Usuario.findOrCreateFacebook(profile, function(err, user) {
       if (err) { return done(err); }
       done(null, user);
     });
