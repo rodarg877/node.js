@@ -1,6 +1,7 @@
 extends ../layout
-
 block content
+    a.btn.btn-success(href='/bicicletas/create') Crear bicicleta
+
     table.table
         thead
             tr  
@@ -21,6 +22,6 @@ block content
                         a(href='bicicletas/'+bici.code+'/update') Editar
                     td
                         form.inline(action='bicicletas/'+bici.code + '/delete' method="post")
-                            input(type="hidden" name="id", value=bici.id)
+                            input(type="hidden" name="id", value=bici.code)
                             button.link-button(type="submit" class="btn" name='submit_param', value= 'submit_param' )
                                 ='Eliminar'
