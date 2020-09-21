@@ -13,14 +13,14 @@ block content
         tBody
             each bici in bicis
                 tr
-                 td=bici.code
-                 td=bici.color
-                 td= bici.modelo
-                 td= bici.ubicacion
-                 td
-                    a(href='bicicletas/'+bici.code+'/update') Editar
-                 td
-                    form.inline(action='bicicletas/'+bici.code + '/delete', method="post")
-                        input(type="hidden", name="id", value=bici.id)
-                        button.link-button(type="submit", class="btn",name='submit_param', value= 'submit_param' )
-                            ='Eliminar'
+                    td=bici.code
+                    td=bici.color
+                    td= bici.modelo
+                    td= bici.ubicacion
+                    td
+                        a(href='bicicletas/'+bici.code+'/update') Editar
+                    td
+                        form.inline(action='bicicletas/'+bici.code + '/delete' method="post")
+                            input(type="hidden" name="id", value=bici.id)
+                            button.link-button(type="submit" class="btn" name='submit_param', value= 'submit_param' )
+                                ='Eliminar'

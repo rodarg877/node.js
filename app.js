@@ -182,8 +182,6 @@ app.use('/privacy_policy', function (req, res) {
 app.use('/googleb1785682a67faf96', function (req, res) {
   res.sendFile('public/googleb1785682a67faf96.html')
 })
-
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
